@@ -1,0 +1,29 @@
+{
+  "name": "team5",
+  "version": "1.0.0",
+  "description": "Since online learning has proved its strengths during the COVID-19 pandemic, our team we try to create an online learning website such as Linkedin Learning, Coursera, etc.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "express-promise-router": "^4.1.1",
+    "mongoose": "^6.2.4",
+    "nodemon": "^2.0.15"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivani2799/software-web-app-team5.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/shivani2799/software-web-app-team5/issues"
+  },
+  "homepage": "https://github.com/shivani2799/software-web-app-team5#readme"
+}
