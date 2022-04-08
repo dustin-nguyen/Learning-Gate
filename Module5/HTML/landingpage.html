@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href ="../CSS/genstyles.css" rel ="stylesheet">
+    </head>
+    <body>
+        <header class="main-header">
+          <div class="header-column">
+            <img src = "../resource/logo.jpg" alt="logo here" width="230" height="60" >
+            <h5>Affordable world class knowledge</h5>
+          </div>
+
+          <div class="header-column">
+            <script>
+              function getCookie(cname){  // from the internet
+                var name = cname + "=";
+                var ca = document.cookie.split(';');
+                for(var i=0; i<ca.length; i++) {
+                  var c = ca[i].trim();
+                  if (c.indexOf(name)==0) { return c.substring(name.length,c.length); }
+                }
+                return "";
+              }
+
+              var username = getCookie("username");
+              var isInstructor = getCookie("isInstructor");
+              if (username != "")
+              {
+                console.log("Cookie: username: " + username + " isInstructor: " + isInstructor);
+                if (isInstructor == "true"){
+                  document.write('<div><a href = "maininstrucotr.html" class = "button-index">Dashboard</a></div>');
+                }
+                else{
+                  document.write('<div><a href = "mainstudent.html" class = "button-index">Dashboard</a></div>');
+                }
+              }
+              else{
+                document.write('<div><a href = "login.html" class = "button-index">Login</a><a href = "signup.html" class = "button-index">Sign up</a></div>');
+              }
+            </script>
+            <!-- <div>
+                <a href = "login.html" class = "button-index">Login</a>
+                <a href = "signup.html" class = "button-index">Sign up</a>
+            </div> -->
+            <div>
+              <form action="" method="get">
+                <input type=”search” placeholder="Search" name=”keyword” class="search">
+                <input type=button value="Search">
+              </form>
+            </div>
+          </div>
+        </header>
+
+        <ul class="main-nav">
+          <li><a href="#">AI</a></li>
+          <li><a href="#">Algorithm</a></li>
+          <li><a href="#">Math</a></li>
+          <li><a href="#">History</a></li>
+          <li><a href="#">Economy</a></li>
+          <li><a href="#">History</a></li>
+        </ul>
+
+        <div id="courses"></div>
+        <script>
+          fetch("http://localhost:3000/view/getallcourse", {
+            method: "GET",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then(res => {res.json()
+              .then(function(value) {
+
+                String.prototype.format = function() {  // from the internet
+                  if(arguments.length == 0) return this;
+                  var param = arguments[0];
+                  var s = this;
+                  if(typeof(param) == 'object') {
+                    for(var key in param)
+                    s = s.replace(new RegExp("\\{" + key + "\\}", "g"), param[key]);
+                    return s;
+                  } 
+                  else {
+                    for(var i = 0; i < arguments.length; i++)
+                    s = s.replace(new RegExp("\\{" + i + "\\}", "g"), arguments[i]);
+                    return s;
+                  }
+                }
+
+                course_list = value;
+                var content = '';
+                console.log(course_list[0]);
+                for (var i=0; i<course_list.length; i++){
+                  content += '\
+                  <div class="course-card">\
+                    <div class="img">\
+                      <a target="_blank" href="course.html">\
+                      <img src="../resource/ai.jpg" alt="{0}" width="300" height="200">\
+                      </a>\
+                      <div class="desc">{0}</div>\
+                    </div>\
+                  </div>'.format(course_list[i].title);
+                }
+                document.getElementById("courses").innerHTML = content;
+                document.close();
+              });
+            });
+        </script>
+
+    </body>
+
+</html>

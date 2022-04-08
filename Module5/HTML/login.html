@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="LoginPage" content="width=device-width, initial-scale=1.0">
+        <link href ="../CSS/genstyles.css" rel ="stylesheet">
+    </head>
+
+<body>
+  <html>
+  <body>
+    <form action="" method="post" id="login">
+      <div class="container">
+          <h2>Login</h2>
+          <div>
+              <label for="uname">Username</label>
+              <input type="text" placeholder="Enter Username" name="uname" required>
+          </div>
+          <div>
+              <label for="psw">Password</label>
+              <input type="password" placeholder="Enter Password" name="psw" required>
+          </div>
+          <div>
+              <input type="checkbox" checked="checked" name="remember"> Remember me
+              <a href="#">Forget password?</a>
+          </div>
+          <a href="signup.html">Do not have an account?</a>
+          <button type="submit" class="button">Login</button>
+          <a href = "landingpage.html" class = "button">Cancel</a>
+      </div>
+    </form>
+
+  </body>
+  <script>
+    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 GMT";  // clear cookie
+    var form = document.getElementById("login");
+   
+    // async function handleSubmit(event) {
+    form.onsubmit = function handleSubmit(event) {
+      // prevent the default request from sending 
+      event.preventDefault()
+      console.dir(event.target)
+
+      const formData = event.target;
+
+      const data = {
+        username: formData[0].value,
+        password: formData[1].value,
+        remember: formData[2].checked,
+      }
+
+      fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        // redirect: 'follow',
+      })
+        .then(res => {
+          if (res.ok) {
+            res.json().then(function(value) {
+              document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 GMT";  // clear cookie
+              var coki = "username="+encodeURIComponent(value.username)+"; isInstructor="+encodeURIComponent(value.isInstructor);
+              coki += "; expires=Thu, 30 Mar 2022 00:00:00 GMT";
+              console.log(coki);
+              document.cookie = coki;
+
+              // document.cookie = "username="+String(value.username);
+              // document.cookie = "isInstructor="+String(value.isInstructor);
+              console.log(document.cookie);
+              alert("Welcome back, " + String(value.username) + "!");
+              window.location.href = "./landingpage.html";
+            });
+            return;
+          }
+          if (!res.ok) {
+            alert("Wrong username or password");
+            return;
+          }
+        })
+        .catch(err => console.log(err))
+    }
+  </script>
+
+  </html>

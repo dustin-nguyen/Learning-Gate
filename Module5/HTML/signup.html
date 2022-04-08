@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="signupPage" content="width=device-width, initial-scale=1.0">
+    <link href ="../CSS/genstyles.css" rel ="stylesheet">
+</head>
+
+<body>
+    <html>
+
+    <body>
+        <form action="" method="post" id="signup">
+            <div class="container">
+                <h2>Sign Up</h2>
+                <div>
+                    <label for="uname">Username</label>
+                    <input type="text" id="uname" name="username" placeholder="Your username.." required>
+                </div>
+                <div>
+                    <label for="psw">Password</label>
+                    <input type="text" id="psw" name="password" placeholder="Your password.." required>
+                </div>
+                <div>
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your name.." required>
+                </div>
+                <div>
+                    <input type="checkbox" checked="checked" name="isInstructor"> Sign up as instructor
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" placeholder="Your email.." required>
+                </div>
+                <div>
+                    <label for="dscrp">Description</label>
+                    <input type="text" id="dscrp" name="dscrp" placeholder="An description of you.." required>
+                </div>
+                <a href="login.html">Already have an account?</a>
+                <button type="submit" class="button">Sign up</button>
+                <a href = "landingpage.html" class="button">Cancel</a>
+            </div>
+        </form>
+    </body>
+    
+    <script>
+        var form = document.getElementById("signup");
+        //hadle the request manually 
+        form.onsubmit = function handleSubmit(event) {
+            // prevent the default request from sending 
+            event.preventDefault()
+            console.dir(event.target)
+
+            const formData = event.target;
+
+            const data = {
+                username: formData[0].value,
+                password: formData[1].value,
+                name: formData[2].value,
+                isInstructor: formData[3].checked,
+                email: formData[4].value,
+                dscrp: formData[5].value
+            }
+            console.log(JSON.stringify(data))
+            fetch("http://localhost:3000/api/signup", {
+                method: "POST",
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                // redirect: 'follow',
+            })
+                .then(res => {
+                    if (res.ok) {
+                        res.json().then(function(value) {
+                        alert("Welcome to Learning Gate, " + formData[0].value + "!");
+                        // localStorage.setItem("username", formData[0].value);
+                        window.location.href = "./landingpage.html";
+                        return;
+                        });
+                    }
+                    if (!res.ok) {
+                        alert("Username already exits");
+                        return;
+                    }
+                })
+                .catch(err => console.log(err))
+        }
+    </script>
+    </html>

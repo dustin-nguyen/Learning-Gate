@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="createcoursePage" content="width=device-width, initial-scale=1.0">
+    <link href ="../CSS/genstyles.css" rel ="stylesheet">
+</head>
+
+<body>
+    <html>
+    <body>
+        <form action="" method="post" id="courseinfo">
+            <div class="container">
+                <h2>Create a course</h2>
+                <div>
+                    <label for="title">Course name</label>
+                    <input type="text" id="title" name="username" placeholder="Course name" required>
+                </div>
+                <div>
+                    <label for="enrollFee">Enroll fee</label>
+                    <input type="text" id="enrollFee" name="enrollFee" placeholder="Enroll fee" required>
+                </div>
+                <div>
+                    <label for="discription">Discription</label>
+                    <input type="text" id="name" name="name" placeholder="Discription" required>
+                </div>
+                <div>
+                <label for="status">Status</label>
+                    <select id="status" name="status" required>
+                        <option value="open">open</option>
+                        <option value="closed">closed</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="button">Create Course</button>
+                <a href = "maininstructor.html" class="button">Cancel</a>
+            </div>
+        </form>
+    </body>
+    
+    <script>
+        var form = document.getElementById("courseinfo");
+        //hadle the request manually 
+        form.onsubmit = function handleSubmit(event) {
+            // prevent the default request from sending 
+            event.preventDefault()
+            console.dir(event.target)
+
+            function getCookie(cname){  // from the internet
+                var name = cname + "=";
+                var ca = document.cookie.split(';');
+                for(var i=0; i<ca.length; i++) {
+                  var c = ca[i].trim();
+                  if (c.indexOf(name)==0) { return c.substring(name.length,c.length); }
+                }
+                return "";
+              }
+
+            var formData = event.target;
+
+            if (formData[3].value == "open"){
+                var status = "true";
+            }
+            else{
+                var status = "false";
+            }
+
+            const data = {
+                username: getCookie("username"),
+                title: formData[0].value,
+                enrollFee: formData[1].value,
+                discription: formData[2].value,
+                open: status,
+                // instructor: getCookie("username"),
+                // dscrp: formData[5].checked
+            }
+            console.log(JSON.stringify(data))
+            fetch("http://localhost:3000/api/createcourse", {
+                method: "POST",
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            // redirect: 'follow',
+            })
+                .then(res => {
+                    res.json().then(function(value) {console.log(value)});
+                    if (res.ok) {
+                        alert("Successfully create " + formData[0].value + "!");
+                        // localStorage.setItem("username", formData[0].value)
+                        window.location.href = "./maininstructor.html"
+                        return;
+                    }
+                    if (!res.ok) {
+                        alert("There is a course with the same title and the same instructor in the database");
+                        return;
+                    }
+                })
+                .catch(err => console.log(err))
+        }
+    </script>
+    </html>
